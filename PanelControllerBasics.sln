@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelControllerBasics", "PanelControllerBasics\PanelControllerBasics.csproj", "{AC80C34F-E1AA-4F6C-A12F-C15CF195DFBB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dependencies", "dependencies", "{4A3D4DFC-5BBC-4A1A-9AB8-77636FFEA421}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelController", "dependencies\PanelController\PanelController\PanelController.csproj", "{D6CE577E-569B-40FB-A3AE-A485284E0810}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NStreamCom", "dependencies\PanelController\dependencies\NStreamCom\src\C#\NStreamCom\NStreamCom.csproj", "{D2A91EBA-80A4-4EF0-9A94-74ED70107B06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC80C34F-E1AA-4F6C-A12F-C15CF195DFBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC80C34F-E1AA-4F6C-A12F-C15CF195DFBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC80C34F-E1AA-4F6C-A12F-C15CF195DFBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC80C34F-E1AA-4F6C-A12F-C15CF195DFBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6CE577E-569B-40FB-A3AE-A485284E0810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6CE577E-569B-40FB-A3AE-A485284E0810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6CE577E-569B-40FB-A3AE-A485284E0810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6CE577E-569B-40FB-A3AE-A485284E0810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A91EBA-80A4-4EF0-9A94-74ED70107B06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A91EBA-80A4-4EF0-9A94-74ED70107B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A91EBA-80A4-4EF0-9A94-74ED70107B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A91EBA-80A4-4EF0-9A94-74ED70107B06}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D6CE577E-569B-40FB-A3AE-A485284E0810} = {4A3D4DFC-5BBC-4A1A-9AB8-77636FFEA421}
+		{D2A91EBA-80A4-4EF0-9A94-74ED70107B06} = {4A3D4DFC-5BBC-4A1A-9AB8-77636FFEA421}
+	EndGlobalSection
+EndGlobal
