@@ -1,35 +1,61 @@
 ﻿using PanelController.PanelObjects;
 using PanelController.PanelObjects.Properties;
 using System.IO.Ports;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 
 namespace PanelControllerBasics
 {
+    [AutoLaunch]
+    public class SerialChannelOptions : IPanelObject
+    {
+        public static bool s_DTRDefault = true;
+
+        public static bool s_RTSDefault = true;
+
+        public static int s_DetectorDefaultBaudRate = 115200;
+
+        [UserProperty]
+        public bool DTRDefault { get => s_DTRDefault; set => s_DTRDefault = value; }
+
+        [UserProperty]
+        public bool RTSDefault { get => s_RTSDefault; set => s_RTSDefault = value; }
+
+        [UserProperty]
+        public int DetectorDefaultBaudRate { get => s_DetectorDefaultBaudRate; set => s_DetectorDefaultBaudRate = value; }
+    }
+
     public class SerialChannel : IChannel
     {
         private SerialPort _port = new();
 
         private readonly int _openDelay;
-
-        private static bool s_dtrDefault = true;
-
-        private static bool s_rtsDefault = true;
-
-        private static string[] s_oldPortNames = [];
-
-        private static int s_detectorDefaultBaudRate = 115200;
+        
+        public static string[] s_oldPortNames = [];
 
         [UserProperty]
         public string ChannelName { get => $"SerialChannel:{(IsOpen ? _port.PortName : "")}"; }
 
         [UserProperty]
-        public bool DTRDefault { get => s_dtrDefault; set => s_dtrDefault = value; }
+        public bool DTRDefault
+        {
+            get => SerialChannelOptions.s_RTSDefault;
+            set => SerialChannelOptions.s_DTRDefault = value;
+        }
 
         [UserProperty]
-        public bool RTSDefault { get => s_rtsDefault; set => s_rtsDefault = value; }
+        public bool RTSDefault
+        {
+            get => SerialChannelOptions.s_RTSDefault;
+            set => SerialChannelOptions.s_RTSDefault = value;
+        }
 
         [UserProperty]
-        public int DetectorDefaultBaudRate { get => s_detectorDefaultBaudRate; set => s_detectorDefaultBaudRate = value; }
+        public int DetectorDefaultBaudRate
+        {
+            get => SerialChannelOptions.s_DetectorDefaultBaudRate;
+            set => SerialChannelOptions.s_DetectorDefaultBaudRate = value;
+        }
 
         [UserProperty]
         public bool DTR { get => _port.DtrEnable; set => _port.DtrEnable = value; }
@@ -107,7 +133,7 @@ namespace PanelControllerBasics
             {
                 if (s_oldPortNames.Contains(portName))
                     continue;
-                channels.Add(new SerialChannel(portName, s_detectorDefaultBaudRate));
+                channels.Add(new SerialChannel(portName, SerialChannelOptions.s_DetectorDefaultBaudRate));
             }
 
             s_oldPortNames = currentPortNames;

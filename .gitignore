@@ -412,3 +412,4 @@ FodyWeavers.xsd
 # Built Visual Studio Code Extensions
 *.vsix
 
+/PanelControllerBasics/Properties/launchSettings.json
