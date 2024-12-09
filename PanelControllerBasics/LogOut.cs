@@ -6,10 +6,13 @@ namespace PanelControllerBasics
 {
     public class LogOut : IPanelAction
     {
+        [UserProperty]
         public Logger.Levels Level { get; set; } = Logger.Levels.Debug;
 
+        [UserProperty]
         public string Sender { get; set; } = "";
 
+        [UserProperty]
         public string Message { get; set; } = "";
 
         [ItemName]
