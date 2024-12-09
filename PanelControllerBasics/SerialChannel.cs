@@ -1,14 +1,21 @@
-﻿using PanelController.PanelObjects;
+﻿using PanelController.Controller;
+using PanelController.PanelObjects;
 using PanelController.PanelObjects.Properties;
 using System.IO.Ports;
-using System.Runtime.ConstrainedExecution;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PanelControllerBasics
 {
     [AutoLaunch]
+    [ItemName("SerialOptions")]
     public class SerialChannelOptions : IPanelObject
     {
+        private static SerialChannelOptions? s_instance;
+
+        private static string SerialChannelOptionsFile = "SerialChannelOptions.json";
+
         public static bool s_DTRDefault = true;
 
         public static bool s_RTSDefault = true;
@@ -23,6 +30,41 @@ namespace PanelControllerBasics
 
         [UserProperty]
         public int DetectorDefaultBaudRate { get => s_DetectorDefaultBaudRate; set => s_DetectorDefaultBaudRate = value; }
+
+        public SerialChannelOptions()
+        {
+            if (s_instance is not null)
+                throw new InvalidOperationException("Can only create one instance of this type");
+            s_instance = this;
+            Main.Deinitialized += Deinitialized;
+
+            if (!File.Exists(SerialChannelOptionsFile))
+                return;
+            using FileStream file = File.OpenRead(SerialChannelOptionsFile);
+            try
+            {
+                JsonSerializer.Deserialize<SerialChannelOptions>(file);
+            }
+            catch (Exception exc)
+            {
+                Logger.Log($"SerialChannelOptions loading failed: {exc}", Logger.Levels.Error, "SerialChannelOptions.SerialChannelOptions()");
+            }
+        }
+
+        private void Deinitialized(object? sender, EventArgs e)
+        {
+            using FileStream file = File.Create(SerialChannelOptionsFile);
+            using StreamWriter writer = new(file);
+            writer.Write(JsonSerializer.Serialize(this));
+        }
+
+        [JsonConstructor]
+        public SerialChannelOptions(bool DTRDefault, bool RTSDefault, int DetectorDefaultBaudRate)
+        {
+            this.DTRDefault = DTRDefault;
+            this.RTSDefault = RTSDefault;
+            this.DetectorDefaultBaudRate = DetectorDefaultBaudRate;
+        }
     }
 
     public class SerialChannel : IChannel
