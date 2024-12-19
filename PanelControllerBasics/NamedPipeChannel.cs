@@ -11,7 +11,7 @@ namespace PanelControllerBasics
 
         public string PipeName { get; init; }
 
-        public bool IsOpen => throw new NotImplementedException();
+        public bool IsOpen => _pipe.IsConnected;
 
         public event EventHandler<byte[]>? BytesReceived;
 
@@ -22,7 +22,7 @@ namespace PanelControllerBasics
         public NamedPipeChannel(string pipeName)
         {
             PipeName = pipeName;
-            _pipe = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1);
+            _pipe = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
         }
 
         public void Close()
@@ -37,8 +37,10 @@ namespace PanelControllerBasics
             if (_pipe.IsConnected)
                 return null;
 
+            bool connected = _pipe.WaitForConnectionAsync().Wait(5000);
+            if (!connected)
+                return "No pipe client connected.";
 
-            _pipe.WaitForConnection();
             _readerThread = new Thread(Reader);
             _readerThread.Start();
             return null;
@@ -54,31 +56,11 @@ namespace PanelControllerBasics
         {
             while (_pipe.IsConnected)
             {
-                if (ReadNextMessage() is byte[] data)
-                    BytesReceived?.Invoke(this, data);
-                else
-                    Thread.Sleep(2);
+                int read = _pipe.ReadByte();
+                if (read == -1)
+                    break;
+                BytesReceived?.Invoke(this, [(byte)read]);
             }
-        }
-
-        private byte[]? ReadNextMessage(int timeoutMilliseconds = 1)
-        {
-            CancellationTokenSource cts = new CancellationTokenSource();
-            byte[] firstByteBuffer = new byte[1];
-            Task readTask = _pipe.ReadAsync(firstByteBuffer, 0, 1, cts.Token);
-            bool timeout = Task.WaitAny(readTask, Task.Delay(timeoutMilliseconds)) == 1;
-
-            if (readTask.IsFaulted && readTask.Exception is not null)
-                throw readTask.Exception;
-
-            if (timeout)
-                return null;
-
-            List<byte> message = new List<byte>() { firstByteBuffer[0] };
-            while (!_pipe.IsMessageComplete)
-                message.Add((byte)_pipe.ReadByte());
-
-            return message.ToArray();
         }
     }
 }
