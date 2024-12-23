@@ -1,0 +1,25 @@
+﻿<Window x:Class="UtilityWindows.LogsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UtilityWindows"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:Controller="clr-namespace:PanelController.Controller;assembly=PanelController"
+        mc:Ignorable="d"
+        Title="LogsWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal">
+            <ComboBox x:Name="LevelFilterComboBox" Margin="5" Width="100"/>
+            <TextBlock Margin="5" VerticalAlignment="Center">Format (/T:Time /L:Level /F:From /M:Message):</TextBlock>
+            <TextBox x:Name="FormatTextBox" Margin="5" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto">/T [/L][/F] /M</TextBox>
+        </StackPanel>
+
+        <TextBox x:Name="LogsBox" Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" />
+    </Grid>
+</Window>
